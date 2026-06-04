@@ -1,11 +1,15 @@
 {
+  "id": "credito-app",
   "name": "Credito App",
   "short_name": "Creditos",
-  "description": "Aplicación para gestión de créditos y clientes",
+  "description": "App para gestión de clientes y créditos",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#1e3a8a",
   "theme_color": "#1e3a8a",
+  "lang": "es",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "./icons/icon-192.png",
@@ -19,4 +23,3 @@
     }
   ]
 }
-
