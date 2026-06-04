@@ -1,6 +1,7 @@
 {
   "name": "Credito App",
   "short_name": "Creditos",
+  "description": "Aplicación para gestión de créditos y clientes",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1e3a8a",
@@ -18,3 +19,4 @@
     }
   ]
 }
+
