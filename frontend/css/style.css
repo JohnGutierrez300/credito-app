@@ -1,0 +1,404 @@
+/* =======================================================
+   VARIABLES
+======================================================= */
+
+:root {
+    --azul-principal: #1E3A8A;
+    --azul-hover: #1D4ED8;
+    --amarillo: #FACC15;
+    --gris-fondo: #F3F4F6;
+    --gris-borde: #E5E7EB;
+    --texto: #111827;
+    --texto-secundario: #6B7280;
+    --blanco: #FFFFFF;
+    --verde: #16A34A;
+    --rojo: #DC2626;
+
+    --sombra-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --sombra-md: 0 8px 20px rgba(0, 0, 0, 0.12);
+    --sombra-lg: 0 15px 35px rgba(0, 0, 0, 0.18);
+
+    --radio: 16px;
+}
+
+/* =======================================================
+   RESET
+======================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--gris-fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+/* =======================================================
+   CONTENEDOR PRINCIPAL
+======================================================= */
+
+.app-container {
+    width: 100%;
+    max-width: 430px;
+    margin: auto;
+    min-height: 100vh;
+    background: var(--blanco);
+    position: relative;
+    overflow-x: hidden;
+    box-shadow: var(--sombra-lg);
+}
+
+/* =======================================================
+   PANTALLAS SPA
+======================================================= */
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    background: var(--gris-fondo);
+}
+
+.active-screen {
+    display: block;
+}
+
+/* =======================================================
+   HEADER
+======================================================= */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1,
+header h2 {
+    letter-spacing: 0.3px;
+}
+
+/* =======================================================
+   INPUTS
+======================================================= */
+
+.input-app {
+    width: 100%;
+    background: white;
+    border: 1px solid var(--gris-borde);
+    border-radius: 12px;
+    padding: 14px;
+    outline: none;
+    transition: .3s;
+    font-size: 14px;
+}
+
+.input-app:focus {
+    border-color: var(--azul-principal);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, .15);
+}
+
+textarea.input-app {
+    resize: none;
+}
+
+/* =======================================================
+   BOTONES
+======================================================= */
+
+.btn-principal {
+    background: var(--azul-principal);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn-principal:hover {
+    background: var(--azul-hover);
+    transform: translateY(-1px);
+}
+
+.btn-dark {
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 14px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.btn-dark:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-sm);
+}
+
+/* =======================================================
+   TARJETAS CLIENTES
+======================================================= */
+
+.cliente-card {
+    background: white;
+    border-radius: var(--radio);
+    padding: 18px;
+    box-shadow: var(--sombra-sm);
+    transition: .25s;
+    border-left: 5px solid var(--azul-principal);
+}
+
+.cliente-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-md);
+}
+
+.cliente-card h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--azul-principal);
+}
+
+.cliente-card span {
+    color: var(--texto-secundario);
+    font-size: 14px;
+}
+
+.cliente-card strong {
+    color: var(--texto);
+}
+
+/* =======================================================
+   ACORDEONES
+======================================================= */
+
+.accordion-app {
+    background: white;
+    border-radius: var(--radio);
+    padding: 16px;
+    box-shadow: var(--sombra-sm);
+}
+
+.accordion-app summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--azul-principal);
+    list-style: none;
+}
+
+.accordion-app summary::-webkit-details-marker {
+    display: none;
+}
+
+.accordion-app summary::after {
+    content: "+";
+    float: right;
+    font-size: 20px;
+}
+
+.accordion-app[open] summary::after {
+    content: "-";
+}
+
+/* =======================================================
+   RADIO BUTTONS
+======================================================= */
+
+input[type="radio"] {
+    accent-color: var(--azul-principal);
+    transform: scale(1.1);
+}
+
+label {
+    font-size: 14px;
+    color: var(--texto);
+}
+
+/* =======================================================
+   SELECT
+======================================================= */
+
+select {
+    cursor: pointer;
+}
+
+/* =======================================================
+   RESUMEN DEL DÍA
+======================================================= */
+
+.resumen-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.resumen-row:last-child {
+    border-bottom: none;
+}
+
+.resumen-row span {
+    color: var(--texto-secundario);
+    font-size: 14px;
+}
+
+.resumen-row strong {
+    color: var(--texto);
+    font-weight: 700;
+}
+
+/* =======================================================
+   BOTTOM NAVIGATION
+======================================================= */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 430px;
+    background: white;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 999;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, .08);
+}
+
+.nav-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 14px 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    cursor: pointer;
+    transition: .3s;
+    color: #64748B;
+}
+
+.nav-btn i {
+    font-size: 20px;
+}
+
+.nav-btn span {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.active-nav {
+    color: var(--azul-principal);
+    position: relative;
+}
+
+.active-nav::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 40px;
+    height: 4px;
+    border-radius: 20px;
+    background: var(--amarillo);
+}
+
+/* =======================================================
+   SCROLLBAR
+======================================================= */
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 20px;
+}
+
+/* =======================================================
+   BADGES
+======================================================= */
+
+.badge-success {
+    background: #DCFCE7;
+    color: #166534;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-warning {
+    background: #FEF9C3;
+    color: #854D0E;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-danger {
+    background: #FEE2E2;
+    color: #991B1B;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =======================================================
+   ANIMACIONES
+======================================================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.active-screen {
+    animation: fadeIn .25s ease;
+}
+
+/* =======================================================
+   UTILIDADES
+======================================================= */
+
+.text-success {
+    color: var(--verde);
+}
+
+.text-danger {
+    color: var(--rojo);
+}
+
+.shadow-card {
+    box-shadow: var(--sombra-md);
+}
+
+.cliente-card {
+    transition: 0.2s;
+}
+
+.cliente-card:hover {
+    transform: scale(1.02);
+}

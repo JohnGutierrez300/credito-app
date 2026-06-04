@@ -1,0 +1,138 @@
+/* =======================================================
+   RESPONSIVE DESIGN
+======================================================= */
+
+/* =========================
+   TABLETS (768px+)
+========================= */
+@media (min-width: 768px) {
+
+    .app-container {
+        max-width: 520px;
+        border-radius: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .bottom-nav {
+        max-width: 520px;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .cliente-card {
+        padding: 20px;
+    }
+
+    .input-app {
+        font-size: 15px;
+        padding: 16px;
+    }
+
+    .btn-principal,
+    .btn-dark {
+        font-size: 15px;
+    }
+
+    .resumen-row {
+        padding: 16px 20px;
+    }
+}
+
+/* =========================
+   LAPTOP / DESKTOP (1024px+)
+========================= */
+@media (min-width: 1024px) {
+
+    body {
+        background: linear-gradient(135deg, #E5E7EB, #F9FAFB);
+    }
+
+    .app-container {
+        max-width: 600px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .bottom-nav {
+        max-width: 600px;
+    }
+
+    .screen {
+        min-height: 100%;
+    }
+
+    .cliente-card:hover {
+        transform: scale(1.02);
+    }
+}
+
+/* =========================
+   ULTRA WIDE (1440px+)
+========================= */
+@media (min-width: 1440px) {
+
+    .app-container {
+        max-width: 650px;
+    }
+
+    .bottom-nav {
+        max-width: 650px;
+    }
+}
+
+/* =========================
+   AJUSTES MÓVIL PEQUEÑO
+========================= */
+@media (max-width: 360px) {
+
+    .cliente-card h2 {
+        font-size: 14px;
+    }
+
+    .input-app {
+        font-size: 13px;
+        padding: 12px;
+    }
+
+    .btn-principal,
+    .btn-dark {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .nav-btn span {
+        font-size: 10px;
+    }
+
+    .nav-btn i {
+        font-size: 18px;
+    }
+}
+
+/* =========================
+   FIX BOTTOM NAV SAFE AREA (TELÉFONOS MODERNOS)
+========================= */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+
+    .bottom-nav {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* =========================
+   MODO ESCRITORIO CENTRADO PRO
+========================= */
+@media (min-width: 1024px) {
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+
+    .app-container {
+        transform: translateY(10px);
+    }
+}
