@@ -1,4 +1,4 @@
-
+const API_URL = "https://credito-app-backend.onrender.com/api";
 /* =========================================================
    V12 - CLIENTES MODULE
    Datos simulados + render + selección de cliente
@@ -18,7 +18,7 @@ let clienteActivo = null;
 
 async function cargarClientesBackend() {
     try {
-        const res = await fetch("http://localhost:3000/api/clientes");
+        const res = await fetch(`${API_URL}/clientes`);
 
         const data = await res.json();
 
@@ -154,7 +154,7 @@ function cargarDetalleCliente(cliente) {
    BUSCADOR DE CLIENTES
 ========================= */
 
-const searchInput = document.querySelector("input[type='text']");
+const searchInput = document.querySelector("#pantalla-clientes input[type='text']");
 
 if (searchInput) {
 
@@ -187,7 +187,7 @@ async function crearClienteBackend(clienteData) {
 
     try {
 
-        const res = await fetch("http://localhost:3000/api/clientes", {
+        const res = await fetch(`${API_URL}/clientes`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -225,9 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
     nombre: document.getElementById("nombre").value,
     telefono: document.getElementById("telefono").value,
     direccion: document.getElementById("direccion").value,
-    cuota: Number(document.getElementById("valorCuota").value || 0),
-    saldo: Number(document.getElementById("valorCuota").value || 0), // 🔥 importante
-    estado: "activo"
+    cuota: Number(document.getElementById("valorCuota").value || 0)
 };
 
         try {
@@ -303,7 +301,7 @@ async function eliminarCliente(id) {
     try {
 
         const res = await fetch(
-            `http://localhost:3000/api/clientes/${id}`,
+            `${API_URL}/clientes/${id}`,
             {
                 method: "DELETE"
             }
@@ -349,7 +347,7 @@ document
     try {
 
         await fetch(
-            `http://localhost:3000/api/clientes/${window.clienteActivo._id}`,
+            `${API_URL}/clientes/${window.clienteActivo._id}`,
             {
                 method: "PUT",
                 headers: {
@@ -426,9 +424,12 @@ document
         return;
     }
 
-    const valor = prompt(
-        "Ingrese valor a cobrar:"
-    );
+    const valor = Number(prompt("Ingrese valor a cobrar:"));
+
+if (isNaN(valor) || valor <= 0) {
+    alert("Valor inválido");
+    return;
+}
 
     if (!valor) return;
 

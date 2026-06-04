@@ -2,6 +2,13 @@
 <html lang="es">
 
 <head>
+
+<link rel="manifest" href="./manifest.json">
+
+<meta name="theme-color" content="#1e3a8a">
+
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>V12 Créditos</title>
@@ -548,6 +555,14 @@
     <script src="./js/clientes.js"></script>
     <script src="./js/caja.js"></script>
     <script src="./js/resumen.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+        .then(() => console.log("SW registrado"))
+        .catch(err => console.log("SW error", err));
+}
+</script>
 
 </body>
 
