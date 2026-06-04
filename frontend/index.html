@@ -557,11 +557,11 @@
     <script src="./js/resumen.js"></script>
 
 <script>
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js")
-        .then(() => console.log("SW registrado"))
-        .catch(err => console.log("SW error", err));
-}
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js")
+            .then(() => console.log("SW registrado"))
+            .catch(err => console.log("SW error", err));
+    }
 </script>
 
 </body>
