@@ -8,9 +8,7 @@ const urlsToCache = [
   "./js/app.js",
   "./js/clientes.js",
   "./js/caja.js",
-  "./js/resumen.js",
-  "https://cdn.tailwindcss.com",
-  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  "./js/resumen.js"
 ];
 
 self.addEventListener("install", (event) => {
@@ -19,12 +17,15 @@ self.addEventListener("install", (event) => {
       return cache.addAll(urlsToCache);
     })
   );
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
