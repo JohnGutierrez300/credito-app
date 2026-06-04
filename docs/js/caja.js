@@ -14,7 +14,7 @@ let movimientosCaja = [];
    ELEMENTOS UI
 ========================= */
 
-const btnGuardarCaja = document.querySelector(".btn-dark");
+const btnGuardarCaja = document.querySelector("#pantalla-caja .btn-dark");
 
 /* =========================
    GUARDAR MOVIMIENTO

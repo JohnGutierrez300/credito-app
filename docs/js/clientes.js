@@ -1,4 +1,4 @@
-const API_URL = "https://credito-app-backend.onrender.com/api";
+const API_URL = "https://credito-app.onrender.com/api";
 /* =========================================================
    V12 - CLIENTES MODULE
    Datos simulados + render + selección de cliente
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ) {
 
                 const res = await fetch(
-                    `http://localhost:3000/api/clientes/${window.clienteActivo._id}`,
+                    `${API_URL}/clientes/${window.clienteActivo._id}`,
                     {
                         method: "PUT",
                         headers: {
@@ -439,7 +439,7 @@ if (isNaN(valor) || valor <= 0) {
     try {
 
         const res = await fetch(
-            `http://localhost:3000/api/clientes/${window.clienteActivo._id}`,
+            `${API_URL}/clientes/${window.clienteActivo._id}`,
             {
                 method: "PUT",
                 headers: {
