@@ -1,4 +1,4 @@
-const CACHE_NAME = "credito-app-v1";
+const CACHE_NAME = "credito-app-v13";
 
 const urlsToCache = [
   "./",
