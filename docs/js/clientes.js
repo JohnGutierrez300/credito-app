@@ -20,7 +20,11 @@ async function cargarClientesBackend() {
     try {
         const res = await fetch(`${API_URL}/clientes`);
 
-        const data = await res.json();
+if (!res.ok) {
+    throw new Error("Error API");
+}
+
+const data = await res.json();
 
         clientes = (data.clientes || []).map(c => ({
             _id: c._id,
@@ -36,8 +40,14 @@ async function cargarClientesBackend() {
         renderClientes();
 
     } catch (error) {
-        console.error("Error cargando clientes:", error);
-    }
+    console.error("Error cargando clientes:", error);
+
+    document.getElementById("listaClientes").innerHTML = `
+        <div style="text-align:center;color:red;">
+            ❌ Error cargando datos. Revisa conexión.
+        </div>
+    `;
+}
 }
 
 /* =========================
