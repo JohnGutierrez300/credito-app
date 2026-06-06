@@ -259,7 +259,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const data = await res.json();
 
-                alert("✔ Cliente actualizado");
+                showToast(
+    "✔ Cliente actualizado",
+    "success"
+);
 
                 window.clienteActivo = data.cliente;
             }
@@ -272,7 +275,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (!creado) return;
 
-                alert("✔ Cliente creado correctamente");
+                showToast(
+    "✔ Cliente creado correctamente",
+    "success"
+);
             }
 
             showScreen("clientes");
@@ -283,7 +289,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             console.error(error);
 
-            alert("Error guardando cliente");
+            showToast(
+    "❌ Error guardando cliente",
+    "error"
+);
         }
 
         // reset UI después de guardar
@@ -369,7 +378,10 @@ document
             }
         );
 
-        alert("Estado reiniciado");
+        showToast(
+    "🔄 Estado reiniciado",
+    "warning"
+);
 
         cargarClientesBackend();
 
@@ -463,7 +475,10 @@ if (isNaN(valor) || valor <= 0) {
 
         const data = await res.json();
 
-        alert("Cobro registrado correctamente");
+        showToast(
+    "💰 Cobro registrado correctamente",
+    "success"
+);
 
         window.clienteActivo = data.cliente;
 
