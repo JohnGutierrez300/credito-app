@@ -147,19 +147,43 @@ function cargarDetalleCliente(cliente) {
     const cuota = cliente.cuota ?? 0;
     const estado = cliente.estado ?? "pendiente";
 
+document.getElementById("detalleEstado").innerHTML = `
+    <strong style="
+        color:${estado === "activo" ? "#16a34a" : "#d97706"};
+    ">
+        ${estado.toUpperCase()}
+    </strong>
+`;
+    
+    
+    
+
+
+
     document.getElementById("detallePendientes").innerHTML = `
-        <span class="text-red-600 font-bold">
-            💸 Debe: $${saldo.toLocaleString()}
-        </span>
-    `;
+<div style="
+background:#fee2e2;
+color:#b91c1c;
+padding:10px;
+border-radius:12px;
+font-weight:700;
+">
+💸 Debe: $${saldo.toLocaleString()}
+</div>
+`;
 
     document.getElementById("detallePagadas").innerHTML = `
-        <span class="text-green-600 font-bold">
-            💳 Cuota: $${cuota.toLocaleString()}
-        </span>
-    `;
+<div style="
+background:#dcfce7;
+color:#166534;
+padding:10px;
+border-radius:12px;
+font-weight:700;
+">
+💳 Cuota: $${cuota.toLocaleString()}
+</div>
+`;
 }
-
 /* =========================
    BUSCADOR DE CLIENTES
 ========================= */
@@ -173,8 +197,10 @@ if (searchInput) {
         const value = e.target.value.toLowerCase();
 
         const filtrados = clientes.filter(c =>
-            c.nombre.toLowerCase().includes(value)
-        );
+    (c.nombre || "")
+        .toLowerCase()
+        .includes(value)
+);
 
         renderClientes(filtrados);
     });
@@ -422,41 +448,78 @@ document
 
     document.getElementById("valorCuota").value =
         window.clienteActivo.cuota || 0;
-    
-    document.getElementById(
-    "btnCrearCliente"
-).textContent = "💾 Guardar Cambios";
 
-    
+    document.getElementById("btnCrearCliente").textContent =
+        "💾 Guardar Cambios";
+
     showScreen("nuevo");
-
 });
 
 
-/* =========================================================
-   COBRAR CUOTA / ABONO
-========================================================= */
-
 document
 .getElementById("btnCobrar")
+?.addEventListener("click", () => {
+
+    document
+        .getElementById("modalCobro")
+        .classList.remove("hidden");
+
+    document
+    .getElementById("inputCobro")
+    .value = "";
+});
+
+
+
+document
+.getElementById("btnCancelarCobro")
+?.addEventListener("click", () => {
+
+    document
+        .getElementById("modalCobro")
+        .classList.add("hidden");
+});
+
+
+    document
+.getElementById("inputCobro")
+?.addEventListener("input", function() {
+
+    let valor = this.value.replace(/\D/g,'');
+
+    this.value = Number(valor || 0)
+        .toLocaleString("es-CO");
+});
+    
+    
+    
+
+
+
+
+document
+.getElementById("btnConfirmarCobro")
 ?.addEventListener("click", async () => {
 
-    if (!window.clienteActivo) {
-        alert("Seleccione un cliente");
+    const valor = Number(
+    document
+        .getElementById("inputCobro")
+        .value
+        .replace(/\./g, "")
+);
+
+    if (isNaN(valor) || valor <= 0) {
+
+        showToast(
+            "❌ Valor inválido",
+            "error"
+        );
+
         return;
     }
 
-    const valor = Number(prompt("Ingrese valor a cobrar:"));
-
-if (isNaN(valor) || valor <= 0) {
-    alert("Valor inválido");
-    return;
-}
-
-    if (!valor) return;
-
     const nuevoSaldo =
-        (window.clienteActivo.saldo || 0) - Number(valor);
+        (window.clienteActivo.saldo || 0) - valor;
 
     try {
 
@@ -475,22 +538,30 @@ if (isNaN(valor) || valor <= 0) {
 
         const data = await res.json();
 
-        showToast(
-    "💰 Cobro registrado correctamente",
-    "success"
-);
-
         window.clienteActivo = data.cliente;
 
         cargarDetalleCliente(data.cliente);
 
         cargarClientesBackend();
 
+        document
+            .getElementById("modalCobro")
+            .classList.add("hidden");
+
+        showToast(
+            "💰 Cobro registrado correctamente",
+            "success"
+        );
+
     } catch (error) {
 
         console.error(error);
 
-        alert("Error registrando cobro");
+        showToast(
+            "❌ Error registrando cobro",
+            "error"
+        );
     }
-
 });
+
+

@@ -530,3 +530,160 @@ select {
             translate(-50%, -50%) scale(1);
     }
 }
+
+
+
+
+.modal-cobro {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .55);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal-cobro-content {
+
+    width: 90%;
+    max-width: 340px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, .25);
+
+    animation: popup .25s ease;
+}
+
+.modal-cobro-content h2 {
+    text-align: center;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 15px;
+}
+
+.modal-cobro-content input {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: 2px solid #dbeafe;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    font-size: 18px;
+}
+
+.modal-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.modal-actions button {
+
+    flex: 1;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-weight: 600;
+}
+
+#btnCancelarCobro {
+    background: #e5e7eb;
+}
+
+#btnConfirmarCobro {
+    background: #1e3a8a;
+    color: white;
+}
+
+@keyframes popup {
+    from {
+        transform: scale(.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+
+
+.modal-cobro-content input {
+
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 16px;
+
+    font-size: 22px;
+
+    text-align: center;
+
+    font-weight: 700;
+
+    border-radius: 14px;
+
+    border: 2px solid #bfdbfe;
+
+    background: #f8fafc;
+
+    transition: .2s;
+}
+
+.modal-cobro-content input:focus {
+
+    border-color: #2563eb;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 4px rgba(37, 99, 235, .15);
+}
+
+#btnConfirmarCobro {
+
+    background:
+        linear-gradient(135deg,
+            #1e3a8a,
+            #2563eb);
+
+    color: white;
+}
+
+#btnConfirmarCobro:hover {
+
+    transform: translateY(-2px);
+}
+
+#btnCancelarCobro:hover {
+
+    background: #d1d5db;
+}

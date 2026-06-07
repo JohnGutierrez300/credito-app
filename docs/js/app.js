@@ -56,6 +56,21 @@ navButtons.forEach(btn => {
 
         const screen = btn.dataset.screen.replace("pantalla-", "");
 
+        // Si entra a AGREGAR CLIENTE
+        if (screen === "nuevo") {
+
+            window.clienteActivo = null;
+
+            document.getElementById("documento").value = "";
+            document.getElementById("nombre").value = "";
+            document.getElementById("telefono").value = "";
+            document.getElementById("direccion").value = "";
+            document.getElementById("valorCuota").value = "";
+
+            document.getElementById("btnCrearCliente").textContent =
+                "Crear Cliente y Activar Crédito";
+        }
+
         showScreen(screen);
     });
 });
@@ -119,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/service-worker.js")
+        navigator.serviceWorker.register("./sw.js")
             .then(() => console.log("SW registrado"))
             .catch(err => console.log("SW error", err));
     });
