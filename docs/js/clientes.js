@@ -501,7 +501,8 @@ document
 
 document
 .getElementById("btnConfirmarCobro")
-?.addEventListener("click", async () => {
+    ?.addEventListener("click", async () => {
+    console.log("BOTON CONFIRMAR CLICK");
 
     const valor = Number(
     document
