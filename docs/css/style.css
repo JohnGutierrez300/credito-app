@@ -687,3 +687,67 @@ select {
 
     background: #d1d5db;
 }
+
+
+
+
+.modal-cobro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 999999;
+}
+
+/* cuando está oculto */
+.modal-cobro.hidden {
+    display: none;
+}
+
+.modal-cobro-content {
+    width: 90%;
+    max-width: 380px;
+
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+
+    animation: pop 0.2s ease-in-out;
+}
+
+/* animación bonita */
+@keyframes pop {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+.modal-actions button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
