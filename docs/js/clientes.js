@@ -502,7 +502,9 @@ document
 document
 .getElementById("btnConfirmarCobro")
     ?.addEventListener("click", async () => {
-    console.log("BOTON CONFIRMAR CLICK");
+
+        console.log("BOTON COBRAR PRESIONADO");
+    
 
     const valor = Number(
     document
