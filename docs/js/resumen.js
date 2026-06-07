@@ -12,8 +12,10 @@ function getClientes() {
     return window.clientes || [];
 }
 
-function getMovimientosCaja() {
-    return window.getMovimientosCaja ? window.getMovimientosCaja() : [];
+function obtenerMovimientosCaja() {
+    return typeof window.getMovimientosCaja === "function"
+        ? window.getMovimientosCaja()
+        : [];
 }
 
 /* =========================
@@ -23,7 +25,7 @@ function getMovimientosCaja() {
 function calcularResumen() {
 
     const clientes = getClientes();
-    const caja = getMovimientosCaja();
+    const caja = obtenerMovimientosCaja();
 
     let totalClientes = clientes.length;
     let clientesNuevos = 1; // simulado

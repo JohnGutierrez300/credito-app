@@ -37,6 +37,8 @@ const data = await res.json();
             estado: c.estado || "pendiente"
         }));
 
+window.clientes = clientes;
+
         renderClientes();
 
     } catch (error) {
