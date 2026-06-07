@@ -377,12 +377,67 @@ document
 
     if (!window.clienteActivo) return;
 
-    eliminarCliente(window.clienteActivo._id);
+    document.getElementById("nombreEliminar").textContent =
+        window.clienteActivo.nombre;
+
+    document
+    .getElementById("modalEliminar")
+    .classList.remove("hidden");
 
 });
 
 
+document
+.getElementById("btnCancelarEliminar")
+?.addEventListener("click", () => {
 
+    document
+    .getElementById("modalEliminar")
+    .classList.add("hidden");
+
+});
+
+document
+.getElementById("btnConfirmarEliminar")
+?.addEventListener("click", async () => {
+
+    if (!window.clienteActivo) return;
+
+    try {
+
+        const res = await fetch(
+            `${API_URL}/clientes/${window.clienteActivo._id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const data = await res.json();
+
+        document
+        .getElementById("modalEliminar")
+        .classList.add("hidden");
+
+        showToast(
+            "🗑 Cliente eliminado",
+            "success"
+        );
+
+        cargarClientesBackend();
+
+        showScreen("clientes");
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "❌ Error eliminando cliente",
+            "error"
+        );
+    }
+
+});
 
 
 document
