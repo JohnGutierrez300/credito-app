@@ -399,7 +399,10 @@ document
 
 document
 .getElementById("btnConfirmarEliminar")
-?.addEventListener("click", async () => {
+    ?.addEventListener("click", async () => {
+    
+        console.log("ELIMINAR PRESIONADO");
+console.log(window.clienteActivo);
 
     if (!window.clienteActivo) return;
 
