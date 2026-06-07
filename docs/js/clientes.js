@@ -458,119 +458,114 @@ document
 });
 
 
-document
-.getElementById("btnCobrar")
-?.addEventListener("click", () => {
+document.addEventListener("DOMContentLoaded", () => {
 
     document
+    .getElementById("btnCobrar")
+    ?.addEventListener("click", () => {
+
+        document
         .getElementById("modalCobro")
         .classList.remove("hidden");
 
-    document
-    .getElementById("inputCobro")
-    .value = "";
-});
-
-
-
-document
-.getElementById("btnCancelarCobro")
-?.addEventListener("click", () => {
-
-    document
-        .getElementById("modalCobro")
-        .classList.add("hidden");
-});
-
-
-    document
-.getElementById("inputCobro")
-?.addEventListener("input", function() {
-
-    let valor = this.value.replace(/\D/g,'');
-
-    this.value = Number(valor || 0)
-        .toLocaleString("es-CO");
-});
-    
-    
-    
-
-
-
-
-document
-.getElementById("btnConfirmarCobro")
-?.addEventListener("click", async () => {
-
-    alert("ENTRO AL COBRO");
-
-    console.log("BOTON COBRAR PRESIONADO");
-
-        
-    
-
-    const valor = Number(
-    document
+        document
         .getElementById("inputCobro")
-        .value
-        .replace(/\./g, "")
-);
+        .value = "";
+    });
 
-    if (isNaN(valor) || valor <= 0) {
 
-        showToast(
-            "❌ Valor inválido",
-            "error"
-        );
 
-        return;
-    }
-
-    const nuevoSaldo =
-        (window.clienteActivo.saldo || 0) - valor;
-
-    try {
-
-        const res = await fetch(
-            `${API_URL}/clientes/${window.clienteActivo._id}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    saldo: nuevoSaldo < 0 ? 0 : nuevoSaldo
-                })
-            }
-        );
-
-        const data = await res.json();
-
-        window.clienteActivo = data.cliente;
-
-        cargarDetalleCliente(data.cliente);
-
-        cargarClientesBackend();
+    document
+    .getElementById("btnCancelarCobro")
+    ?.addEventListener("click", () => {
 
         document
+        .getElementById("modalCobro")
+        .classList.add("hidden");
+    });
+
+
+
+    document
+    .getElementById("inputCobro")
+    ?.addEventListener("input", function () {
+
+        let valor = this.value.replace(/\D/g, "");
+
+        this.value = Number(valor || 0)
+            .toLocaleString("es-CO");
+    });
+
+
+
+    document
+    .getElementById("btnConfirmarCobro")
+    ?.addEventListener("click", async () => {
+
+        console.log("BOTON COBRAR PRESIONADO");
+
+        const valor = Number(
+            document
+            .getElementById("inputCobro")
+            .value
+            .replace(/\./g, "")
+        );
+
+        if (isNaN(valor) || valor <= 0) {
+
+            showToast(
+                "❌ Valor inválido",
+                "error"
+            );
+
+            return;
+        }
+
+        const nuevoSaldo =
+            (window.clienteActivo.saldo || 0) - valor;
+
+        try {
+
+            const res = await fetch(
+                `${API_URL}/clientes/${window.clienteActivo._id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        saldo: nuevoSaldo < 0 ? 0 : nuevoSaldo
+                    })
+                }
+            );
+
+            const data = await res.json();
+
+            window.clienteActivo = data.cliente;
+
+            cargarDetalleCliente(data.cliente);
+
+            cargarClientesBackend();
+
+            document
             .getElementById("modalCobro")
             .classList.add("hidden");
 
-        showToast(
-            "💰 Cobro registrado correctamente",
-            "success"
-        );
+            showToast(
+                "💰 Cobro registrado correctamente",
+                "success"
+            );
 
-    } catch (error) {
+        } catch (error) {
 
-        console.error(error);
+            console.error(error);
 
-        showToast(
-            "❌ Error registrando cobro",
-            "error"
-        );
-    }
+            showToast(
+                "❌ Error registrando cobro",
+                "error"
+            );
+        }
+    });
+
 });
-
 
