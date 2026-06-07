@@ -208,14 +208,202 @@ if (searchInput) {
     });
 }
 
-/* =========================
-   INICIALIZAR
-========================= */
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
-    cargarClientesBackend();
-});
 
+    /* =========================
+       INICIALIZAR
+    ========================= */
+    cargarClientesBackend();
+
+    /* =========================
+       CREAR / EDITAR CLIENTE
+    ========================= */
+    document.getElementById("btnCrearCliente")?.addEventListener("click", async () => {
+
+        const cliente = {
+            documento: document.getElementById("documento").value,
+            nombre: document.getElementById("nombre").value,
+            telefono: document.getElementById("telefono").value,
+            direccion: document.getElementById("direccion").value,
+            cuota: Number(document.getElementById("valorCuota").value || 0)
+        };
+
+        try {
+
+            if (window.clienteActivo && window.clienteActivo._id) {
+
+                const res = await fetch(
+                    `${API_URL}/clientes/${window.clienteActivo._id}`,
+                    {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(cliente)
+                    }
+                );
+
+                const data = await res.json();
+
+                window.clienteActivo = data.cliente;
+
+                showToast("✔ Cliente actualizado", "success");
+
+            } else {
+
+                const creado = await crearClienteBackend(cliente);
+
+                if (!creado) return;
+
+                showToast("✔ Cliente creado correctamente", "success");
+            }
+
+            showScreen("clientes");
+            cargarClientesBackend();
+
+        } catch (error) {
+            console.error(error);
+            showToast("❌ Error guardando cliente", "error");
+        }
+
+        // limpiar
+        document.getElementById("documento").value = "";
+        document.getElementById("nombre").value = "";
+        document.getElementById("telefono").value = "";
+        document.getElementById("direccion").value = "";
+        document.getElementById("valorCuota").value = "";
+
+        document.getElementById("btnCrearCliente").textContent =
+            "Crear Cliente y Activar Crédito";
+    });
+
+    /* =========================
+       EDITAR CLIENTE
+    ========================= */
+    document.getElementById("btnEditarCliente")?.addEventListener("click", () => {
+
+        if (!window.clienteActivo) return;
+
+        document.getElementById("documento").value = window.clienteActivo.documento || "";
+        document.getElementById("nombre").value = window.clienteActivo.nombre || "";
+        document.getElementById("telefono").value = window.clienteActivo.telefono || "";
+        document.getElementById("direccion").value = window.clienteActivo.direccion || "";
+        document.getElementById("valorCuota").value = window.clienteActivo.cuota || 0;
+
+        document.getElementById("btnCrearCliente").textContent =
+            "💾 Guardar Cambios";
+
+        showScreen("nuevo");
+    });
+
+    /* =========================
+       ELIMINAR CLIENTE
+    ========================= */
+    document.getElementById("btnEliminarCliente")?.addEventListener("click", () => {
+
+        if (!window.clienteActivo) return;
+
+        document.getElementById("nombreEliminar").textContent =
+            window.clienteActivo.nombre;
+
+        document.getElementById("modalEliminar").classList.remove("hidden");
+    });
+
+    document.getElementById("btnCancelarEliminar")?.addEventListener("click", () => {
+        document.getElementById("modalEliminar").classList.add("hidden");
+    });
+
+    document.getElementById("btnConfirmarEliminar")?.addEventListener("click", async () => {
+
+        if (!window.clienteActivo) return;
+
+        try {
+
+            const res = await fetch(
+                `${API_URL}/clientes/${window.clienteActivo._id}`,
+                { method: "DELETE" }
+            );
+
+            const data = await res.json();
+
+            console.log(data);
+
+            document.getElementById("modalEliminar").classList.add("hidden");
+
+            showToast("🗑 Cliente eliminado", "success");
+
+            cargarClientesBackend();
+            showScreen("clientes");
+
+        } catch (error) {
+            console.error(error);
+            showToast("❌ Error eliminando cliente", "error");
+        }
+    });
+
+    /* =========================
+       COBRAR
+    ========================= */
+    document.getElementById("btnCobrar")?.addEventListener("click", () => {
+        document.getElementById("modalCobro").classList.remove("hidden");
+        document.getElementById("inputCobro").value = "";
+    });
+
+    document.getElementById("btnCancelarCobro")?.addEventListener("click", () => {
+        document.getElementById("modalCobro").classList.add("hidden");
+    });
+
+    document.getElementById("inputCobro")?.addEventListener("input", function () {
+        let valor = this.value.replace(/\D/g, "");
+        this.value = Number(valor || 0).toLocaleString("es-CO");
+    });
+
+    document.getElementById("btnConfirmarCobro")?.addEventListener("click", async () => {
+
+        const valor = Number(
+            document.getElementById("inputCobro").value.replace(/\./g, "")
+        );
+
+        if (!valor || valor <= 0) {
+            showToast("❌ Valor inválido", "error");
+            return;
+        }
+
+        const nuevoSaldo =
+            (window.clienteActivo.saldo || 0) - valor;
+
+        try {
+
+            const res = await fetch(
+                `${API_URL}/clientes/${window.clienteActivo._id}`,
+                {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        saldo: nuevoSaldo < 0 ? 0 : nuevoSaldo
+                    })
+                }
+            );
+
+            const data = await res.json();
+
+            window.clienteActivo = data.cliente;
+
+            cargarDetalleCliente(data.cliente);
+            cargarClientesBackend();
+
+            document.getElementById("modalCobro").classList.add("hidden");
+
+            showToast("💰 Cobro registrado correctamente", "success");
+
+        } catch (error) {
+            console.error(error);
+            showToast("❌ Error registrando cobro", "error");
+        }
+    });
+
+});
 
 /* =========================================================
    CREAR CLIENTE EN BACKEND (MONGODB)
@@ -250,384 +438,210 @@ async function crearClienteBackend(clienteData) {
     }
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    const btn = document.getElementById("btnCrearCliente");
+    cargarClientesBackend();
 
-    if (!btn) return;
-
-    btn.addEventListener("click", async () => {
+    /* =========================
+       CREAR / EDITAR CLIENTE
+    ========================= */
+    document.getElementById("btnCrearCliente")?.addEventListener("click", async () => {
 
         const cliente = {
-    documento: document.getElementById("documento").value,
-    nombre: document.getElementById("nombre").value,
-    telefono: document.getElementById("telefono").value,
-    direccion: document.getElementById("direccion").value,
-    cuota: Number(document.getElementById("valorCuota").value || 0)
-};
+            documento: document.getElementById("documento").value,
+            nombre: document.getElementById("nombre").value,
+            telefono: document.getElementById("telefono").value,
+            direccion: document.getElementById("direccion").value,
+            cuota: Number(document.getElementById("valorCuota").value || 0)
+        };
 
         try {
 
-            // EDITAR
-            if (
-                window.clienteActivo &&
-                window.clienteActivo._id
-            ) {
+            if (window.clienteActivo && window.clienteActivo._id) {
 
-                const res = await fetch(
-                    `${API_URL}/clientes/${window.clienteActivo._id}`,
-                    {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(cliente)
-                    }
-                );
+                const res = await fetch(`${API_URL}/clientes/${window.clienteActivo._id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(cliente)
+                });
 
                 const data = await res.json();
-
-                showToast(
-    "✔ Cliente actualizado",
-    "success"
-);
-
                 window.clienteActivo = data.cliente;
-            }
 
-            // CREAR
-            else {
+                showToast("✔ Cliente actualizado", "success");
 
-                const creado =
-                    await crearClienteBackend(cliente);
+            } else {
+
+                const creado = await crearClienteBackend(cliente);
 
                 if (!creado) return;
 
-                showToast(
-    "✔ Cliente creado correctamente",
-    "success"
-);
+                showToast("✔ Cliente creado correctamente", "success");
             }
 
             showScreen("clientes");
-
             cargarClientesBackend();
 
         } catch (error) {
-
             console.error(error);
-
-            showToast(
-    "❌ Error guardando cliente",
-    "error"
-);
+            showToast("❌ Error guardando cliente", "error");
         }
 
-        // reset UI después de guardar
-if (document.getElementById("btnCrearCliente")) {
-    document.getElementById("btnCrearCliente").textContent =
-        "Crear Cliente y Activar Crédito";
-}
-
-document.getElementById("documento").value = "";
-document.getElementById("nombre").value = "";
-document.getElementById("telefono").value = "";
-document.getElementById("direccion").value = "";
-document.getElementById("valorCuota").value = "";
-
-    });
-});
-
-
-
-
-async function eliminarCliente(id) {
-
-    if (!confirm("¿Eliminar cliente?")) return;
-
-    try {
-
-        const res = await fetch(
-            `${API_URL}/clientes/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-        const data = await res.json();
-
-        alert(data.mensaje);
-
-        cargarClientesBackend();
-
-        showScreen("clientes");
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert("Error eliminando cliente");
-    }
-}
-
-
-
-
-
-document
-.getElementById("btnReiniciarEstado")
-?.addEventListener("click", async () => {
-
-    if (!window.clienteActivo) return;
-
-    try {
-
-        await fetch(
-            `${API_URL}/clientes/${window.clienteActivo._id}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    estado: "pendiente"
-                })
-            }
-        );
-
-        showToast(
-    "🔄 Estado reiniciado",
-    "warning"
-);
-
-        cargarClientesBackend();
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert("Error actualizando estado");
-    }
-
-});
-
-
-/* =========================================================
-   EDITAR CLIENTE Y PRÉSTAMO
-========================================================= */
-
-document
-.getElementById("btnEditarCliente")
-?.addEventListener("click", () => {
-
-    if (!window.clienteActivo) {
-        alert("Seleccione un cliente");
-        return;
-    }
-
-    document.getElementById("documento").value =
-        window.clienteActivo.documento || "";
-
-    document.getElementById("nombre").value =
-        window.clienteActivo.nombre || "";
-
-    document.getElementById("telefono").value =
-        window.clienteActivo.telefono || "";
-
-    document.getElementById("direccion").value =
-        window.clienteActivo.direccion || "";
-
-    document.getElementById("valorCuota").value =
-        window.clienteActivo.cuota || 0;
-
-    document.getElementById("btnCrearCliente").textContent =
-        "💾 Guardar Cambios";
-
-    showScreen("nuevo");
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
-
-document
-.getElementById("btnEliminarCliente")
-?.addEventListener("click", () => {
-
-    if (!window.clienteActivo) return;
-
-    document.getElementById("nombreEliminar").textContent =
-        window.clienteActivo.nombre;
-
-    document
-    .getElementById("modalEliminar")
-    .classList.remove("hidden");
-
-});
-
-
-document
-.getElementById("btnCancelarEliminar")
-?.addEventListener("click", () => {
-
-    document
-    .getElementById("modalEliminar")
-    .classList.add("hidden");
-
-});
-
-document
-.getElementById("btnConfirmarEliminar")
-    ?.addEventListener("click", async () => {
-
-
-    
-        console.log("ELIMINAR PRESIONADO");
-console.log(window.clienteActivo);
-
-    if (!window.clienteActivo) return;
-
-    try {
-
-        const res = await fetch(
-            `${API_URL}/clientes/${window.clienteActivo._id}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-        const data = await res.json();
-
-        document
-        .getElementById("modalEliminar")
-        .classList.add("hidden");
-
-        showToast(
-            "🗑 Cliente eliminado",
-            "success"
-        );
-
-        cargarClientesBackend();
-
-        showScreen("clientes");
-
-    } catch (error) {
-
-        console.error(error);
-
-        showToast(
-            "❌ Error eliminando cliente",
-            "error"
-        );
-    }
-
-});
-
-    document
-    .getElementById("btnCobrar")
-    ?.addEventListener("click", () => {
-
-        document
-        .getElementById("modalCobro")
-        .classList.remove("hidden");
-
-        document
-        .getElementById("inputCobro")
-        .value = "";
+        document.getElementById("documento").value = "";
+        document.getElementById("nombre").value = "";
+        document.getElementById("telefono").value = "";
+        document.getElementById("direccion").value = "";
+        document.getElementById("valorCuota").value = "";
+
+        document.getElementById("btnCrearCliente").textContent =
+            "Crear Cliente y Activar Crédito";
     });
 
+    /* =========================
+       EDITAR CLIENTE
+    ========================= */
+    document.getElementById("btnEditarCliente")?.addEventListener("click", () => {
 
+        if (!window.clienteActivo) return;
 
-    document
-    .getElementById("btnCancelarCobro")
-    ?.addEventListener("click", () => {
+        document.getElementById("documento").value = window.clienteActivo.documento || "";
+        document.getElementById("nombre").value = window.clienteActivo.nombre || "";
+        document.getElementById("telefono").value = window.clienteActivo.telefono || "";
+        document.getElementById("direccion").value = window.clienteActivo.direccion || "";
+        document.getElementById("valorCuota").value = window.clienteActivo.cuota || 0;
 
-        document
-        .getElementById("modalCobro")
-        .classList.add("hidden");
+        document.getElementById("btnCrearCliente").textContent =
+            "💾 Guardar Cambios";
+
+        showScreen("nuevo");
     });
 
+    /* =========================
+       ELIMINAR CLIENTE
+    ========================= */
+    document.getElementById("btnEliminarCliente")?.addEventListener("click", () => {
 
+        if (!window.clienteActivo) return;
 
-    document
-    .getElementById("inputCobro")
-    ?.addEventListener("input", function () {
+        document.getElementById("nombreEliminar").textContent =
+            window.clienteActivo.nombre;
 
-        let valor = this.value.replace(/\D/g, "");
-
-        this.value = Number(valor || 0)
-            .toLocaleString("es-CO");
+        document.getElementById("modalEliminar").classList.remove("hidden");
     });
 
+    document.getElementById("btnCancelarEliminar")?.addEventListener("click", () => {
+        document.getElementById("modalEliminar").classList.add("hidden");
+    });
 
+    document.getElementById("btnConfirmarEliminar")?.addEventListener("click", async () => {
 
-    document
-    .getElementById("btnConfirmarCobro")
-    ?.addEventListener("click", async () => {
-
-        console.log("BOTON COBRAR PRESIONADO");
-
-        const valor = Number(
-            document
-            .getElementById("inputCobro")
-            .value
-            .replace(/\./g, "")
-        );
-
-        if (isNaN(valor) || valor <= 0) {
-
-            showToast(
-                "❌ Valor inválido",
-                "error"
-            );
-
-            return;
-        }
-
-        const nuevoSaldo =
-            (window.clienteActivo.saldo || 0) - valor;
+        if (!window.clienteActivo) return;
 
         try {
 
-            const res = await fetch(
-                `${API_URL}/clientes/${window.clienteActivo._id}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        saldo: nuevoSaldo < 0 ? 0 : nuevoSaldo
-                    })
-                }
-            );
+            const res = await fetch(`${API_URL}/clientes/${window.clienteActivo._id}`, {
+                method: "DELETE"
+            });
+
+            const data = await res.json();
+
+            console.log(data);
+
+            document.getElementById("modalEliminar").classList.add("hidden");
+
+            showToast("🗑 Cliente eliminado", "success");
+
+            cargarClientesBackend();
+            showScreen("clientes");
+
+        } catch (error) {
+            console.error(error);
+            showToast("❌ Error eliminando cliente", "error");
+        }
+    });
+
+    /* =========================
+       REINICIAR ESTADO
+    ========================= */
+    document.getElementById("btnReiniciarEstado")?.addEventListener("click", async () => {
+
+        if (!window.clienteActivo) return;
+
+        try {
+
+            await fetch(`${API_URL}/clientes/${window.clienteActivo._id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ estado: "pendiente" })
+            });
+
+            showToast("🔄 Estado reiniciado", "warning");
+            cargarClientesBackend();
+
+        } catch (error) {
+            console.error(error);
+        }
+    });
+
+    /* =========================
+       COBRAR
+    ========================= */
+    document.getElementById("btnCobrar")?.addEventListener("click", () => {
+        document.getElementById("modalCobro").classList.remove("hidden");
+        document.getElementById("inputCobro").value = "";
+    });
+
+    document.getElementById("btnCancelarCobro")?.addEventListener("click", () => {
+        document.getElementById("modalCobro").classList.add("hidden");
+    });
+
+    document.getElementById("inputCobro")?.addEventListener("input", function () {
+        let valor = this.value.replace(/\D/g, "");
+        this.value = Number(valor || 0).toLocaleString("es-CO");
+    });
+
+    document.getElementById("btnConfirmarCobro")?.addEventListener("click", async () => {
+
+        const valor = Number(document.getElementById("inputCobro").value.replace(/\./g, ""));
+
+        if (!valor || valor <= 0) {
+            showToast("❌ Valor inválido", "error");
+            return;
+        }
+
+        const nuevoSaldo = (window.clienteActivo.saldo || 0) - valor;
+
+        try {
+
+            const res = await fetch(`${API_URL}/clientes/${window.clienteActivo._id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    saldo: nuevoSaldo < 0 ? 0 : nuevoSaldo
+                })
+            });
 
             const data = await res.json();
 
             window.clienteActivo = data.cliente;
 
             cargarDetalleCliente(data.cliente);
-
             cargarClientesBackend();
 
-            document
-            .getElementById("modalCobro")
-            .classList.add("hidden");
+            document.getElementById("modalCobro").classList.add("hidden");
 
-            showToast(
-                "💰 Cobro registrado correctamente",
-                "success"
-            );
+            showToast("💰 Cobro registrado correctamente", "success");
 
         } catch (error) {
-
             console.error(error);
-
-            showToast(
-                "❌ Error registrando cobro",
-                "error"
-            );
+            showToast("❌ Error registrando cobro", "error");
         }
     });
 
 });
+
+
+
+
 
