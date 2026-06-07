@@ -501,9 +501,13 @@ document
 
 document
 .getElementById("btnConfirmarCobro")
-    ?.addEventListener("click", async () => {
+?.addEventListener("click", async () => {
 
-        console.log("BOTON COBRAR PRESIONADO");
+    alert("ENTRO AL COBRO");
+
+    console.log("BOTON COBRAR PRESIONADO");
+
+        
     
 
     const valor = Number(
