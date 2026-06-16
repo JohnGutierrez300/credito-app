@@ -376,15 +376,29 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const res = await fetch(
-                `${API_URL}/clientes/${window.clienteActivo._id}`,
-                {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        saldo: nuevoSaldo < 0 ? 0 : nuevoSaldo
-                    })
-                }
-            );
+    `${API_URL}/cobros`,
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            clienteId: window.clienteActivo._id,
+            tipo: "Cuota",
+            valor: valor,
+            metodoPago: "Efectivo",
+            observaciones: ""
+        })
+    }
+);
+
+const data = await res.json();
+
+if (!res.ok) {
+    throw new Error(data.mensaje);
+}
+
+window.clienteActivo = data.clienteActualizado;
 
             const data = await res.json();
 

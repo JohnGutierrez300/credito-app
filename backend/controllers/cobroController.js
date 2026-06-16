@@ -2,7 +2,7 @@
    V12 - CONTROLADOR COBROS
    Lógica de pagos, cuotas y abonos
 ========================================================= */
-
+const Caja = require("../models/Caja");
 const Cobro = require("../models/Cobro");
 const Cliente = require("../models/Cliente");
 
@@ -54,6 +54,14 @@ const registrarCobro = async (req, res) => {
         });
 
         await cobro.save();
+
+
+        await Caja.create({
+    tipo: "Ingreso",
+    concepto: "Cobro Cliente",
+    valor,
+    observaciones: cliente.nombre
+});
 
         /* =========================
            ACTUALIZAR CLIENTE

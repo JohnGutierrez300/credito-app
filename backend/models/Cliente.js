@@ -46,6 +46,11 @@ const ClienteSchema = new mongoose.Schema(
             default: 0
         },
 
+        pagadas: {
+    type: Number,
+    default: 0
+},
+
         estado: {
             type: String,
             enum: [
