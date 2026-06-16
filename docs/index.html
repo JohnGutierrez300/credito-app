@@ -516,47 +516,37 @@
 <div id="modalCobro" class="modal-cobro hidden">
 
     <div class="modal-cobro-content">
-
-        <div class="text-center">
-
-            <div style="
-                width:70px;
-                height:70px;
-                margin:auto;
-                border-radius:50%;
-                background:#dbeafe;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                font-size:32px;
-            ">
-                💰
+    
+        <div class="cobro-header">
+            <div class="cobro-icon">
+                <i class="fas fa-money-bill-wave"></i>
             </div>
-
-            <h2 style="margin-top:15px;">
-                Registrar Cobro
-            </h2>
-
-            <p style="color:#64748b;font-size:14px;">
-                Ingresa el valor recibido
+    
+            <h2>Registrar Cobro</h2>
+    
+            <p>
+                Ingresa el valor recibido del cliente
             </p>
-
         </div>
-
-        <input id="inputCobro" type="text" placeholder="$ 0" autocomplete="off">
-
+    
+        <div class="cobro-input-wrap">
+            <label>Valor recibido</label>
+    
+            <input id="inputCobro" type="text" placeholder="$ 0">
+        </div>
+    
         <div class="modal-actions">
-
+    
             <button id="btnCancelarCobro">
                 Cancelar
             </button>
-
+    
             <button id="btnConfirmarCobro">
-                Confirmar Cobro
+                Confirmar
             </button>
-
+    
         </div>
-
+    
     </div>
 
 </div>
