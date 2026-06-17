@@ -76,7 +76,10 @@ if (btnGuardarCaja) {
            ALERTA
         ========================= */
 
-        alert("✔ Movimiento registrado correctamente");
+        showToast(
+    `💰 ${movimiento.tipo} registrado correctamente`,
+    "success"
+);
 
         /* =========================
            SIMULAR ACTUALIZACIÓN DASHBOARD
