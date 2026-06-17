@@ -1,3 +1,4 @@
+const API_URL = "https://credito-app.onrender.com/api";
 /* =========================================================
    V12 - CAJA MODULE
    Movimientos de caja (Ingresos / Egresos)
@@ -22,7 +23,7 @@ const btnGuardarCaja = document.querySelector("#pantalla-caja .btn-dark");
 
 if (btnGuardarCaja) {
 
-    btnGuardarCaja.addEventListener("click", () => {
+    btnGuardarCaja.addEventListener("click", async  () => {
 
         const tipoMovimiento = document.querySelector('input[name="mov"]:checked');
 
@@ -61,7 +62,21 @@ if (btnGuardarCaja) {
            GUARDAR EN MEMORIA
         ========================= */
 
-        movimientosCaja.push(movimiento);
+        const res = await fetch(`${API_URL}/caja`, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(movimiento)
+});
+
+const data = await res.json();
+
+if (!res.ok) {
+    throw new Error(data.mensaje);
+}
+
+movimientosCaja.unshift(data.movimiento);
 
         console.log("💰 MOVIMIENTO DE CAJA:", movimiento);
 
@@ -123,3 +138,23 @@ function actualizarResumenCaja(mov) {
 window.getMovimientosCaja = function () {
     return movimientosCaja;
 };
+
+
+
+async function cargarMovimientosCaja() {
+
+    try {
+
+        const res = await fetch(`${API_URL}/caja`);
+
+        const data = await res.json();
+
+        movimientosCaja = data.movimientos || [];
+
+        console.log("Caja cargada:", movimientosCaja);
+
+    } catch (error) {
+
+        console.error("Error cargando caja:", error);
+    }
+}

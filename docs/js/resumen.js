@@ -28,13 +28,13 @@ function calcularResumen() {
     const caja = obtenerMovimientosCaja();
 
     let totalClientes = clientes.length;
-    let clientesNuevos = 1; // simulado
-    let ausentes = 2; // simulado
-    let aplazados = 1; // simulado
+    
+   
+    
 
     let pagosRegistrados = clientes.reduce((acc, c) => acc + (c.pagadas || 0), 0);
 
-    let cajaInicial = 500000;
+    
 
     let ingresos = 0;
     let egresos = 0;

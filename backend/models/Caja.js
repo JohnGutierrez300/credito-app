@@ -51,3 +51,4 @@ const CajaSchema = new mongoose.Schema(
 
 module.exports = mongoose.model("Caja", CajaSchema);
 
+
